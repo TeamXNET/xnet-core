@@ -1,38 +1,31 @@
-My Free Cam
-===========
+### Architecture
 
-![](screenshot/screenshot1.png)
+#### Video Streaming
+- Built with Peerjs for webrtc and socketio for websocket.
+- Admin publishing client waits for users to join.
+- When users join they emit an event containing their peerjs ID via websocket, which is relayed to Admin publishing client.
+- The admin publishing client upon recieving the viewer's peerjs client initiates a peer to peer connection to the viewer, and begins streaming audio and video data across the network using webrtc.
 
-It is a free clone and distributed of cam4.com and myfreecams.com among others.
+#### Live Chat
+- Purely built over websockets. The live chat does not utilize webrtc.
+- Clients emit messages that are then stored for running a backfill when later users join, this backfill is purged ever 10 seconds when thread size exceeds over 400 messages.
+- Server broadcasts messages, which is a monitored event that a client will respond to by altering it's own state.
 
-* It creates your own page to transmit your live webcam
-* Run over tor (P2P)
-* Chatea with your spectators
-* Received tips or donations in bitcoins without intermediaries
+### Capabilities
+- Authenticated route to access to upload permissions
+- Once logged in I can begin streaming
+- A random user can hit a url to view a live stream session.
+- live stream sessions will be visible only when I am streaming.
+- live stream will be presented with a live chat room!
 
-Install
--------
-
-~~~
-sudo apt-get install python python-twisted python-twisted-bin \
-python-twisted-core python-twisted-runner python-twisted-names \
-python-twisted-mail python-twisted-words python-twisted-web \
-python-zope.interface ngircd vlc-nox tor qrencode
-~~~
-
-If your do not have a wallet of bitcoin installs [electrum](https://electrum.org) and import private address
-
-~~~
-sudo pip install bitcoin
-~~~
-
-Run
----
-
-Read and configure config.py
-
-~~~
-./my-libre-cam.sh
-~~~
-
-Donations bitcoin:13b3LtSpCfHi3sgYMPsHxsccmWgkWon7TC
+### Technologies
+- Node js, Typescript, Javascript, HTML, CSS, EJS, WebRtc (peer), Webscokets (Socket.io)
+  
+### How to run this?
+- Have npm installed!
+- npm i -g peerjs
+- Create and set your local env variables: JWT_KEY, USERNAME, PASSWORD 
+- npm i
+- npm run start.
+- Access localhost:3000/admin/signin to login and stream
+- Access localhost:3000/ to view livestream and chat!
